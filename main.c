@@ -128,8 +128,8 @@ int replace(
 
 
 int substitute_all(
-        char ** rules_for_non_terminals[26],
-        const int rules_count[26],
+        char *** rules_for_non_terminals,
+        const int * rules_count,
         char ** string,
         unsigned int N)
 {
@@ -164,7 +164,7 @@ int main(
 {
     FILE * rules;
     int N;
-    char ** rules_for_non_terminals[26] = { 0 };
+    char *** rules_for_non_terminals = (char ***) calloc(26u, sizeof(char **));
     int rules_count[26] = { 0 };
     char * string = malloc(MAX_BUFF_LEN);
 
