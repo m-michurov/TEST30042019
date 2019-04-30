@@ -1,0 +1,3 @@
+H:/NSUProgLabs/TEST30042019/cmake-build-debug/CMakeFiles/TEST30042019.dir
+H:/NSUProgLabs/TEST30042019/cmake-build-debug/CMakeFiles/edit_cache.dir
+H:/NSUProgLabs/TEST30042019/cmake-build-debug/CMakeFiles/rebuild_cache.dir

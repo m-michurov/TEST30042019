@@ -1,0 +1,12 @@
+B
+| abbBab
+| A
+|
+;
+A
+| x
+;
+D
+| abc
+| dDd
+;
