@@ -1,4 +1,4 @@
-# Install script for directory: H:/NSUProgLabs/TEST30042019
+# Install script for directory: E:/CLionProjects/TEST30042019
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "H:/NSUProgLabs/TEST30042019/cmake-build-release/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "E:/CLionProjects/TEST30042019/cmake-build-release/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

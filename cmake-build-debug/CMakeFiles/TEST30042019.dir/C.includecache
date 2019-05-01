@@ -6,9 +6,11 @@
 
 #IncludeRegexTransform: 
 
-H:/NSUProgLabs/TEST30042019/main.c
-stdio.h
--
+E:/CLionProjects/TEST30042019/grammarlist.c
+grammarlist.h
+E:/CLionProjects/TEST30042019/grammarlist.h
+
+E:/CLionProjects/TEST30042019/grammarlist.h
 stdlib.h
 -
 string.h

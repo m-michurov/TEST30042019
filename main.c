@@ -1,160 +1,39 @@
 #include <stdio.h>
+#include <time.h>
 #include <stdlib.h>
 #include <string.h>
 
 
-#define offset(X) (X - 'A')
+#include "grammarlist.h"
+#include "stringlist.h"
+#include "grammar.h"
 
-#define MAX_BUFF_LEN 1024
 
-char * my_realloc(
-        void * mem,
-        size_t new_size)
+void HandleError(
+        AltList * rules_array[MAX_NON_TERMINALS],
+        StringList * string,
+        int errcode)
 {
-    if (mem == 0)
+    switch (errcode)
     {
-        return calloc(new_size, 1);
+        case ALLOCATION_ERROR:
+            printf("Allocation error\n");
+            break;
+        case FORMAT_ERROR:
+            printf("Bad input format\n");
+            break;
+        case READ_ERROR:
+            printf("Error when reading input file\n");
+            break;
+        default:
+            printf("Unknown error has occurred\n");
     }
-    else
+    for (int k = 0; k < MAX_NON_TERMINALS; k++)
     {
-        return realloc(mem, new_size);
-    }
-}
-
-
-typedef struct st_List List;
-
-struct st_List {
-    List * next;
-    char * string;
-};
-
-
-int get_rule(
-        FILE * rules,
-        char ** rules_for_non_terminals[26],
-        int rules_count[26])
-{
-    int non_terminal;
-    char rule_buff[MAX_BUFF_LEN];
-
-    non_terminal = fgetc(rules);
-    if (non_terminal == EOF)
-    {
-        return -1;
-    }
-    fgetc(rules); // '\n'
-
-    do
-    {
-        fgets(rule_buff, MAX_BUFF_LEN, rules);
-
-        if (rule_buff[0] == '|')
-        {
-            rules_count[offset(non_terminal)] += 1;
-
-            rules_for_non_terminals[offset(non_terminal)] =
-                        (char **) my_realloc(rules_for_non_terminals[offset(non_terminal)], (size_t) rules_count[offset(non_terminal)]);
-
-            rules_for_non_terminals[offset(non_terminal)][rules_count[offset(non_terminal)] - 1] = malloc(strlen(rule_buff) - 2);
-
-            strcpy(rules_for_non_terminals[offset(non_terminal)][rules_count[offset(non_terminal)] - 1], rule_buff + 2);
-
-            rules_for_non_terminals[offset(non_terminal)][rules_count[offset(non_terminal)] - 1][strlen(rule_buff) - 3] = 0;
-
-        }
-    } while (rule_buff[0] != ';');
-
-    return 0;
-}
-
-
-void print_rules(
-        char ** rules_for_non_terminals[26],
-        const int rules_count[26])
-{
-    for (int k = 'A'; k <= 'Z'; k++)
-    {
-        if (rules_count[offset(k)] != 0)
-        {
-            printf("%c\n", k);
-            for (int p = 0; p < rules_count[offset(k)]; p++)
-            {
-                printf("| %s\n", rules_for_non_terminals[offset(k)][p]);
-            }
-            printf(";\n");
-        }
-    }
-}
-
-
-int replace(
-        char ** string,
-        int non_terminal,
-        char * new_substring)
-{
-    char * rest_pointer;
-    char * rest;
-
-    size_t sub_len = strlen(new_substring);
-    size_t str_len = strlen(*string);
-    size_t rest_len;
-
-    if (sub_len + str_len - 1 > MAX_BUFF_LEN)
-    {
-        *string = realloc(*string, sub_len + str_len - 1);
+        FreeAltList(rules_array[k]);
     }
 
-    rest_pointer = strchr(*string, non_terminal) + 1;
-
-    if (rest_pointer == NULL)
-    {
-        return -1;
-    }
-
-    rest_len = strlen(rest_pointer);
-
-    rest = calloc(strlen(rest_pointer), 1);
-
-    memcpy(rest, rest_pointer, strlen(rest_pointer));
-
-    memcpy(rest_pointer - 1, new_substring, strlen(new_substring));
-    memcpy(rest_pointer - 1 + sub_len, rest, rest_len);
-
-    free(rest);
-
-    return 0;
-}
-
-
-int substitute_all(
-        char *** rules_for_non_terminals,
-        const int * rules_count,
-        char ** string,
-        unsigned int N)
-{
-    char * current_rule;
-    int current_non_terminal;
-
-    unsigned int substitutions_count = 0;
-
-    for (current_non_terminal = 'A'; current_non_terminal <= 'Z'; current_non_terminal++)
-    {
-        if (strchr(*string, current_non_terminal) != NULL)
-        {
-            current_rule = rules_for_non_terminals[offset(current_non_terminal)][0];
-            while(!replace(string, current_non_terminal, current_rule))
-            {
-                substitutions_count++;
-                if (substitutions_count == N)
-                {
-                    return 0;
-                }
-            }
-        }
-    }
-
-    return 0;
+    FreeString(string);
 }
 
 
@@ -162,11 +41,15 @@ int main(
         int argc,
         char * argv[])
 {
-    FILE * rules;
+    FILE * input_file;
     int N;
-    char *** rules_for_non_terminals = (char ***) calloc(26u, sizeof(char **));
-    int rules_count[26] = { 0 };
-    char * string = malloc(MAX_BUFF_LEN);
+    int errcode = 0;
+    int rules_count[MAX_NON_TERMINALS] = { 0 };
+    AltList * rules_array[MAX_NON_TERMINALS] = { 0 };
+    StringList * string = NULL;
+    char starting_non_terminal[2];
+
+    srand(time(0));
 
     if (argc != 3)
     {
@@ -176,23 +59,52 @@ int main(
     else
     {
         N = strtol(argv[1], NULL, 10);
-        rules = fopen(argv[2], "rt");
+        input_file = fopen(argv[2], "rt");
 
-        if (N < 0 || rules == NULL)
+        if (N < 0 || input_file == NULL)
         {
             printf("Bad input\n");
             return 0;
         }
 
-        while (!get_rule(rules, rules_for_non_terminals, rules_count));
+        fread(starting_non_terminal, 1, 1, input_file);
+        starting_non_terminal[1] = 0;
+        fseek(input_file, 0, 0);
 
-        print_rules(rules_for_non_terminals, rules_count);
+        while (!feof(input_file) && errcode == 0)
+        {
+            errcode = GetRule(rules_array, input_file, rules_count);
+        }
 
-        substitute_all(rules_for_non_terminals, rules_count, &string, (unsigned int) N);
+        if (errcode != 0)
+        {
+            HandleError(rules_array, string, errcode);
+            return 0;
+        }
 
-        printf("%s", string);
+        PrintRules(rules_array);
 
-        fclose(rules);
+        for (int t = 0; t < 1024; t++)
+        {
+            string = StringToList(starting_non_terminal);
+
+            RandomlyApplyRules(rules_array, rules_count, &string, (unsigned int) N);
+
+            PrintString(string);
+
+            FreeString(string);
+        }
+
+
+        for (int k = 0; k < MAX_NON_TERMINALS; k++)
+        {
+            FreeAltList(rules_array[k]);
+        }
+
+        FreeString(string);
+
+
+        fclose(input_file);
     }
 
     return 0;

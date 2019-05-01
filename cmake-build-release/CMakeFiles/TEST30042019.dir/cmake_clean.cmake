@@ -1,5 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/TEST30042019.dir/main.c.obj"
+  "CMakeFiles/TEST30042019.dir/stringlist.c.obj"
+  "CMakeFiles/TEST30042019.dir/grammarlist.c.obj"
+  "CMakeFiles/TEST30042019.dir/grammar.c.obj"
   "TEST30042019.pdb"
   "TEST30042019.exe"
   "TEST30042019.exe.manifest"

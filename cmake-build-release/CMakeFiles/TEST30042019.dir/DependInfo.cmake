@@ -4,7 +4,10 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "H:/NSUProgLabs/TEST30042019/main.c" "H:/NSUProgLabs/TEST30042019/cmake-build-release/CMakeFiles/TEST30042019.dir/main.c.obj"
+  "E:/CLionProjects/TEST30042019/grammar.c" "E:/CLionProjects/TEST30042019/cmake-build-release/CMakeFiles/TEST30042019.dir/grammar.c.obj"
+  "E:/CLionProjects/TEST30042019/grammarlist.c" "E:/CLionProjects/TEST30042019/cmake-build-release/CMakeFiles/TEST30042019.dir/grammarlist.c.obj"
+  "E:/CLionProjects/TEST30042019/main.c" "E:/CLionProjects/TEST30042019/cmake-build-release/CMakeFiles/TEST30042019.dir/main.c.obj"
+  "E:/CLionProjects/TEST30042019/stringlist.c" "E:/CLionProjects/TEST30042019/cmake-build-release/CMakeFiles/TEST30042019.dir/stringlist.c.obj"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
