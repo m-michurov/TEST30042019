@@ -142,7 +142,7 @@ static int _replace_symbol(
             FindEnd(new_substring)->next = pre_symbol_node->next->next;
             pre_symbol_node->next = new_substring;
         }
-        else
+        else // if new_substring is NULL (an empty string)
         {
             pre_symbol_node->next = pre_symbol_node->next->next;
         }

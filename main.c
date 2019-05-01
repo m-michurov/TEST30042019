@@ -82,19 +82,13 @@ int main(
             return 0;
         }
 
-        PrintRules(rules_array);
+        //PrintRules(rules_array);
 
-        for (int t = 0; t < 1024; t++)
-        {
-            string = StringToList(starting_non_terminal);
+        string = StringToList(starting_non_terminal);
 
-            RandomlyApplyRules(rules_array, rules_count, &string, (unsigned int) N);
+        RandomlyApplyRules(rules_array, rules_count, &string, (unsigned int) N);
 
-            PrintString(string);
-
-            FreeString(string);
-        }
-
+        PrintString(string);
 
         for (int k = 0; k < MAX_NON_TERMINALS; k++)
         {
@@ -102,7 +96,6 @@ int main(
         }
 
         FreeString(string);
-
 
         fclose(input_file);
     }
