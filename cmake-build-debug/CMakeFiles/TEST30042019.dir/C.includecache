@@ -6,13 +6,41 @@
 
 #IncludeRegexTransform: 
 
-E:/CLionProjects/TEST30042019/grammarlist.c
+E:/CLionProjects/TEST30042019/grammar.h
+stdio.h
+-
 grammarlist.h
 E:/CLionProjects/TEST30042019/grammarlist.h
+stringlist.h
+E:/CLionProjects/TEST30042019/stringlist.h
 
 E:/CLionProjects/TEST30042019/grammarlist.h
 stdlib.h
 -
 string.h
+-
+
+E:/CLionProjects/TEST30042019/main.c
+stdio.h
+-
+time.h
+-
+stdlib.h
+-
+string.h
+-
+grammarlist.h
+E:/CLionProjects/TEST30042019/grammarlist.h
+stringlist.h
+E:/CLionProjects/TEST30042019/stringlist.h
+grammar.h
+E:/CLionProjects/TEST30042019/grammar.h
+
+E:/CLionProjects/TEST30042019/stringlist.h
+stdlib.h
+-
+string.h
+-
+stdio.h
 -
 

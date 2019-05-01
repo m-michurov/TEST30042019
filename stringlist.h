@@ -40,4 +40,8 @@ int ReplaceSymbol(
         int symbol);
 
 
+StringList * FindEnd(
+        StringList * head);
+
+
 #endif

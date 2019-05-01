@@ -68,7 +68,7 @@ StringList * StringToList(
 }
 
 
-static StringList * FindNodeBeforeSymbol(
+static StringList * _find_node_before_symbol(
         StringList *head,
         int symbol)
 {
@@ -116,7 +116,7 @@ static int _replace_symbol(
         return 0;
     }
 
-    StringList * pre_symbol_node = FindNodeBeforeSymbol(*head, symbol);
+    StringList * pre_symbol_node = _find_node_before_symbol(*head, symbol);
     StringList * buff;
 
     if (pre_symbol_node == NULL)
